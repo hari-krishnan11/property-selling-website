@@ -1,0 +1,174 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<title>View Property</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- ✅ Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+<style>
+body{
+    min-height:100vh;
+    background:
+    linear-gradient(rgba(255,255,255,0.85),rgba(255,255,255,0.85)),
+    url("https://images.unsplash.com/photo-1600585154340-be6161a56a0c") no-repeat;
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+}
+
+/* Top navigation */
+.top-nav{
+    margin-top:20px;
+}
+
+/* Hover effect */
+.btn:hover{
+    transform: scale(1.05);
+    transition: 0.2s;
+}
+
+/* Filter box */
+.filter-card{
+    max-width:600px;
+    margin:30px auto;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.08);
+    background:#ffffff;
+}
+
+/* Property card */
+.property-card{
+    border-radius:15px;
+    overflow:hidden;
+    transition:0.3s;
+    box-shadow:0 6px 20px rgba(0,0,0,0.08);
+}
+
+.property-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 12px 30px rgba(0,0,0,0.15);
+}
+
+.property-img{
+    height:200px;
+    object-fit:cover;
+}
+
+#result{
+    margin-top:20px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- ✅ TOP NAV -->
+<div class="d-flex justify-content-between align-items-center top-nav">
+
+    <!-- Back Button -->
+    <button onclick="history.back()" class="btn btn-outline-secondary d-flex align-items-center gap-2">
+        <i class="bi bi-arrow-left"></i> Back
+    </button>
+
+</div>
+
+<!-- Filter -->
+<div class="filter-card">
+
+<h4 class="text-center mb-4">Browse Properties</h4>
+
+<form method="post">
+{% csrf_token %}
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+<label class="form-label">District</label>
+
+<select name="sel_district" id="sel_district" class="form-select" required>
+<option value="">Select District</option>
+{% for i in districtData %}
+<option value="{{i.id}}">{{i.district_name}}</option>
+{% endfor %}
+</select>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">Place</label>
+
+<select name="sel_place" id="sel_place" class="form-select" required>
+<option value="">Select Place</option>
+</select>
+
+</div>
+
+</div>
+
+</form>
+
+</div>
+
+<!-- Results -->
+<div id="result" class="row g-4"></div>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+
+$("#sel_district").change(function(){
+
+var disid=$(this).val();
+var ur="{% url 'User:Ajaxplace' %}";
+
+$.ajax({
+url:ur,
+data:{disid:disid},
+success:function(data){
+$("#sel_place").html(data);
+},
+});
+
+});
+
+$("#sel_place").change(function(){
+
+var pid=$(this).val();
+var ur="{% url 'User:Ajaxproperty' %}";
+
+$.ajax({
+url:ur,
+data:{pid:pid},
+success:function(data){
+$("#result").html(data);
+},
+});
+
+});
+
+</script>
+
+</body>
+</html>
+
+{% if msg %}
+<script>
+alert("{{msg}}")
+window.location="{% url 'User:ViewProperty' %}"
+</script>
+{% endif %}

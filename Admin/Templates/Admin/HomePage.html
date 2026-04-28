@@ -1,0 +1,276 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Real Estate Management</title>
+
+    <link rel="shortcut icon" href="{% static 'Admin/assets/images/favicon.ico' %}">
+
+    <link rel="stylesheet" href="{% static 'Admin/assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Admin/assets/vendors/css/vendors.min.css' %}">
+    <link rel="stylesheet" href="{% static 'Admin/assets/css/theme.min.css' %}">
+
+    <style>
+        body {
+            overflow-x: hidden;
+            background: #f4f6fb;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* Sidebar */
+        .nxl-navigation {
+            width: 280px;
+            position: fixed;
+            height: 100%;
+            background: linear-gradient(180deg, #1e3c72, #2a5298);
+            color: white;
+            padding-top: 20px;
+        }
+
+        /* ✅ REMOVE DOTS */
+        .nxl-navbar {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .nxl-navbar li {
+            list-style: none;
+        }
+
+        .nxl-navigation a {
+            color: white !important;
+            font-weight: 600;
+            padding: 18px 25px;
+            display: block;
+            font-size: 17px;
+            border-radius: 8px;
+            margin: 6px 10px;
+            transition: 0.3s;
+        }
+
+        .nxl-navigation a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        /* Header */
+        .top-header {
+            position: fixed;
+            top: 0;
+            left: 280px;
+            right: 0;
+            height: 65px;
+            background: white;
+            display: flex;
+            align-items: center;
+            padding: 0 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+        }
+
+        /* Main content */
+        .nxl-container {
+            margin-left: 280px;
+            margin-top: 90px;
+            padding: 25px;
+        }
+
+        /* Heading */
+        .dashboard-title {
+            font-weight: 700;
+            color: #1e3c72;
+            text-transform: uppercase;
+        }
+
+        /* Cards */
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .card h2 {
+            font-weight: 700;
+            color: #1e3c72;
+        }
+
+        .table th {
+            background: #2a5298;
+            color: white;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <nav class="nxl-navigation">
+        <ul class="nxl-navbar">
+            <li><a href="{% url 'Admin:HomePage' %}">🏠 Dashboard</a></li>
+            <li><a href="{% url 'Admin:District' %}">📍 District</a></li>
+            <li><a href="{% url 'Admin:place' %}">📌 Place</a></li>
+            <li><a href="{% url 'Admin:ViewProperty' %}">🏢 View Properties</a></li>
+            <li><a href="{% url 'Admin:feedback' %}">💬 Feedback</a></li>
+            <li><a href="{% url 'Admin:Sellercomplaints' %}">⚠ Seller Complaints</a></li>
+            <li><a href="{% url 'Admin:usercomplaints' %}">⚠ User Complaints</a></li>
+            <li><a href="{% url 'Admin:verifyseller' %}">✔ Verify Seller</a></li>
+            <li><a href="{% url 'Admin:verifyUser' %}">✔ Verify User</a></li>
+        </ul>
+    </nav>
+
+    <!-- Header -->
+    <div class="top-header">
+
+        <!-- LEFT -->
+        <div>
+            <h5 style="margin:0;">Real Estate Management</h5>
+            <small>Property Listing System</small>
+        </div>
+
+        <!-- RIGHT -->
+        <div style="margin-left:auto;">
+            <a href="{% url 'Admin:logout' %}" 
+            style="color:#dc3545; font-weight:600; text-decoration:none;">
+                Logout
+            </a>
+        </div>
+
+    </div>
+
+    <!-- Main -->
+    <main class="nxl-container">
+
+        <!-- Heading -->
+        <div class="card mb-4 text-center">
+            <div class="card-body">
+                <h2 class="dashboard-title">Admin Dashboard</h2>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="row">
+
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h2>{{users}}</h2>
+                        <p>Total Users</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h2>{{sellers}}</h2>
+                        <p>Total Sellers</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h2>{{complaints}}</h2>
+                        <p>Total Complaints</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h2>{{feedbacks}}</h2>
+                        <p>Total Feedback</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Report -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5>Booking / Payment Report</h5>
+            </div>
+
+            <div class="card-body">
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row">
+
+                        <div class="col-md-3">
+                            <input type="text" name="username" class="form-control" placeholder="User Name">
+                        </div>
+
+                        <div class="col-md-3">
+                            <input type="text" name="sellername" class="form-control" placeholder="Seller Name">
+                        </div>
+
+                        <div class="col-md-3">
+                            <input type="text" name="place" class="form-control" placeholder="Place">
+                        </div>
+
+                        <div class="col-md-3">
+                            <input type="date" name="fdate" class="form-control">
+                        </div>
+
+                        <div class="col-md-3 mt-2">
+                            <input type="date" name="tdate" class="form-control">
+                        </div>
+
+                        <div class="col-md-3 mt-2">
+                            <button class="btn btn-primary">Search</button>
+                        </div>
+
+                    </div>
+                </form>
+
+                <hr>
+
+                <table class="table table-bordered">
+                    <tr>
+                        <th>User</th>
+                        <th>Seller</th>
+                        <th>Property</th>
+                        <th>Place</th>
+                        <th>Commission</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                    </tr>
+
+                    {% for i in reportData %}
+                    <tr>
+                        <td>{{i.user.user_name}}</td>
+                        <td>{{i.property.seller.seller_name}}</td>
+                        <td>{{i.property.property_name}}</td>
+                        <td>{{i.property.place.place_name}}</td>
+                        <td>{{i.admin_commission}}</td>
+                        <td>{{i.booking_amount}}</td>
+                        <td>{{i.booking_date}}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center">No Records Found</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+
+            </div>
+        </div>
+
+    </main>
+
+    <script src="{% static 'Admin/assets/vendors/js/vendors.min.js' %}"></script>
+    <script src="{% static 'Admin/assets/js/common-init.min.js' %}"></script>
+
+</body>
+</html>

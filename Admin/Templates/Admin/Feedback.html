@@ -1,0 +1,141 @@
+{% extends 'Admin/Header.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+
+/* ===== BACKGROUND ===== */
+body {
+    background: #f4f6fb;
+}
+
+/* ===== CARD ===== */
+.card {
+    background: #ffffff;
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+/* ===== TABLE ===== */
+.table {
+    width: 100%;
+    table-layout: fixed;
+    background: transparent;
+}
+
+/* HEADER */
+.table th {
+    background: #2a5298 !important;
+    color: white !important;
+    text-align: center;
+    font-size: 16px;
+    padding: 12px;
+}
+
+/* CELLS */
+.table td {
+    font-size: 15px;
+    padding: 12px;
+    color: #333 !important;
+    background: #ffffff !important;
+    vertical-align: middle;
+}
+
+/* HOVER */
+.table tbody tr:hover {
+    background: #f1f5ff;
+}
+
+/* TITLE */
+h5 {
+    color: #1e3c72;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+/* COLUMN WIDTH */
+.col-slno { width: 10%; }
+.col-name { width: 25%; }
+.col-feedback { width: 65%; }
+
+</style>
+
+
+<div class="container-fluid">
+
+    <!-- USER FEEDBACK -->
+    <div class="card mt-3">
+        <div class="card-body">
+
+            <h5 class="mb-3">👤 User Feedback</h5>
+
+            <table class="table table-bordered">
+
+                <thead>
+                    <tr>
+                        <th class="col-slno">SL.NO</th>
+                        <th class="col-name">User</th>
+                        <th class="col-feedback">Feedback</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for i in feedbackDatas %}
+                    <tr>
+                        <td class="text-center">{{ forloop.counter }}</td>
+                        <td>{{ i.user.user_name }}</td>
+                        <td>{{ i.feedback_content }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center">No Records Found</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+
+    <!-- SELLER FEEDBACK -->
+    <div class="card mt-4">
+        <div class="card-body">
+
+            <h5 class="mb-3">🏪 Seller Feedback</h5>
+
+            <table class="table table-bordered">
+
+                <thead>
+                    <tr>
+                        <th class="col-slno">SL.NO</th>
+                        <th class="col-name">Seller</th>
+                        <th class="col-feedback">Feedback</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for i in feedbackData %}
+                    <tr>
+                        <td class="text-center">{{ forloop.counter }}</td>
+                        <td>{{ i.seller.seller_name }}</td>
+                        <td>{{ i.feedback_content }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center">No Records Found</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

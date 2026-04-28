@@ -1,0 +1,124 @@
+{% extends 'Admin/Header.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+
+/* PAGE TITLE */
+.page-title{
+    font-weight:600;
+    color:#1e3c72;
+}
+
+/* CARD */
+.card{
+    border-radius:12px;
+    border:none;
+    box-shadow:0 6px 18px rgba(0,0,0,0.08);
+}
+
+/* TABLE */
+.table{
+    background:white;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+/* HEADER (BLUE LIKE DASHBOARD) */
+.table thead{
+    background:#2a5298;
+    color:white;
+}
+
+/* TABLE CELLS */
+.table td{
+    vertical-align:middle;
+}
+
+/* HOVER EFFECT */
+.table tbody tr:hover{
+    background:#f1f5ff;
+}
+
+/* TEXT ALIGN */
+.text-start{
+    text-align:left;
+}
+
+</style>
+
+
+<div class="container-fluid px-4 mt-4">
+
+    <div class="card p-4">
+
+        <h4 class="mb-4 page-title">User Complaints</h4>
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered text-center">
+
+                <thead>
+                    <tr>
+                        <th style="width:5%">SL.NO</th>
+                        <th style="width:15%">User</th>
+                        <th style="width:15%">Title</th>
+                        <th>Content</th>
+                        <th style="width:12%">Date</th>
+                        <th style="width:12%">Reply</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for i in complaintData %}
+                    <tr>
+
+                        <td>{{ forloop.counter }}</td>
+
+                        <td class="fw-semibold">
+                            {{ i.user.user_name }}
+                        </td>
+
+                        <td>{{ i.complaint_title }}</td>
+
+                        <td class="text-start">
+                            {{ i.complaint_content }}
+                        </td>
+
+                        <td>{{ i.complaint_date }}</td>
+
+                        <td>
+                            {% if i.complaint_reply %}
+                                <span class="text-success fw-semibold">
+                                    {{ i.complaint_reply }}
+                                </span>
+                            {% else %}
+                                <span class="text-muted">
+                                    No Reply Yet
+                                </span>
+                            {% endif %}
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-muted">
+                            No complaints available.
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'Admin/Header.html' %}
+
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SubCategory</title>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <table border="1" align="center">
+            <tr>
+                <td>Category</td>
+                <td><select name="sel_Category" id="" required>
+                    <option value="">***Select SubCategory***</option>
+                    {% for i in CategoryData %}
+                    <option
+                    {% if i.id == EditData.Category.id %}
+                        selected
+                    {% endif %}
+                    value="{{i.id}}">{{i.category_name}}</option>
+                    {% endfor %}
+                </select></td>
+            </tr>
+            <tr>
+                <td>SubCategory</td>
+                <td><input type="text" required value="{{EditData.subcategory_name}}" name="txt_SubCategory"></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center"><input type="submit" value="Submit"></td>
+            </tr>
+    </table>
+    </form>
+        <table border="1"align="center">
+            <tr>
+                <td>SI.NO</td>
+                <td>Category</td>
+                <td>SubCategory</td>
+                <td>Actions</td>
+            </tr>
+            {% for i in SubCategory%}
+    <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{i.Category.category_name}}</td>
+        <td>{{i.subcategory_name}}</td>
+        <td>
+            <a href="{% url 'Admin:deletesubcategroy' i.id %}">Delete</a>
+            <a href="{% url 'Admin:EditSubcategory' i.id %}">Edit</a>
+        </td>
+    </tr>
+    {% endfor %}
+        </table>
+    
+</body>
+</html>
+{% if msg %}
+<script>
+    alert("{{msg}}")
+    window.location = "{% url 'Admin:SubCategory' %}"
+</script>
+{% endif %}
+{% endblock %}

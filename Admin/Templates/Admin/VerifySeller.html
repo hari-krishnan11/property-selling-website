@@ -1,0 +1,250 @@
+{% extends 'Admin/Header.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+
+/* ===== CARD ===== */
+.card-custom {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+/* ===== TABLE ===== */
+.table {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* HEADER (BLUE LIKE DASHBOARD) */
+.table thead {
+    background: #2a5298;
+    color: white;
+}
+
+/* TABLE CELLS */
+.table td {
+    vertical-align: middle;
+}
+
+/* HOVER EFFECT */
+.table tbody tr:hover {
+    background-color: #f1f5ff;
+}
+
+/* IMAGE */
+.img-preview {
+    width: 65px;
+    height: 65px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* TITLE */
+.section-title {
+    font-weight: 600;
+    color: #1e3c72;
+}
+
+</style>
+
+
+<div class="container-fluid px-4 mt-4">
+
+<!-- ================= PENDING SELLERS ================= -->
+<div class="card card-custom p-4 mb-5">
+<h4 class="section-title mb-4">Pending Sellers</h4>
+
+<div class="table-responsive">
+<table class="table table-bordered text-center">
+
+<thead>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Email</th>
+<th>Contact</th>
+<th>Photo</th>
+<th>Proof</th>
+<th>District</th>
+<th>Place</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for i in sellerData %}
+<tr>
+
+<td>{{ i.id }}</td>
+<td>{{ i.seller_name }}</td>
+<td>{{ i.seller_email }}</td>
+<td>{{ i.seller_contact }}</td>
+
+<td>
+<img src="{{ i.seller_photo.url }}" class="img-preview">
+</td>
+
+<td>
+<a href="{{ i.seller_proof.url }}" target="_blank" class="btn btn-outline-primary btn-sm">View</a>
+<a href="{{ i.seller_proof.url }}" download class="btn btn-success btn-sm">Download</a>
+</td>
+
+<td>{{ i.place.district.district_name }}</td>
+<td>{{ i.place.place_name }}</td>
+
+<td>
+<a href="{% url 'Admin:AccpetSeller' i.id %}" class="btn btn-success btn-sm">Accept</a>
+<a href="{% url 'Admin:rejectSeller' i.id %}" class="btn btn-danger btn-sm">Reject</a>
+</td>
+
+</tr>
+
+{% empty %}
+<tr>
+<td colspan="9" class="text-muted">No pending sellers</td>
+</tr>
+{% endfor %}
+
+</tbody>
+</table>
+</div>
+</div>
+
+
+<!-- ================= ACCEPTED SELLERS ================= -->
+<div class="card card-custom p-4 mb-5">
+<h4 class="section-title mb-4 text-success">Accepted Sellers</h4>
+
+<div class="table-responsive">
+<table class="table table-bordered text-center">
+
+<thead>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Email</th>
+<th>Contact</th>
+<th>Photo</th>
+<th>Proof</th>
+<th>District</th>
+<th>Place</th>
+<th>Status</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for i in sellerDataAccpeted %}
+<tr>
+
+<td>{{ i.id }}</td>
+<td>{{ i.seller_name }}</td>
+<td>{{ i.seller_email }}</td>
+<td>{{ i.seller_contact }}</td>
+
+<td>
+<img src="{{ i.seller_photo.url }}" class="img-preview">
+</td>
+
+<td>
+<a href="{{ i.seller_proof.url }}" target="_blank" class="btn btn-outline-primary btn-sm">View</a>
+<a href="{{ i.seller_proof.url }}" download class="btn btn-success btn-sm">Download</a>
+</td>
+
+<td>{{ i.place.district.district_name }}</td>
+<td>{{ i.place.place_name }}</td>
+
+<td>
+<span class="badge bg-success">Accepted</span>
+</td>
+
+</tr>
+
+{% empty %}
+<tr>
+<td colspan="9" class="text-muted">No accepted sellers</td>
+</tr>
+{% endfor %}
+
+</tbody>
+</table>
+</div>
+</div>
+
+
+<!-- ================= REJECTED SELLERS ================= -->
+<div class="card card-custom p-4">
+<h4 class="section-title mb-4 text-danger">Rejected Sellers</h4>
+
+<div class="table-responsive">
+<table class="table table-bordered text-center">
+
+<thead>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Email</th>
+<th>Contact</th>
+<th>Photo</th>
+<th>Proof</th>
+<th>District</th>
+<th>Place</th>
+<th>Status</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for i in sellerDataRejected %}
+<tr>
+
+<td>{{ i.id }}</td>
+<td>{{ i.seller_name }}</td>
+<td>{{ i.seller_email }}</td>
+<td>{{ i.seller_contact }}</td>
+
+<td>
+<img src="{{ i.seller_photo.url }}" class="img-preview">
+</td>
+
+<td>
+<a href="{{ i.seller_proof.url }}" target="_blank" class="btn btn-outline-primary btn-sm">View</a>
+<a href="{{ i.seller_proof.url }}" download class="btn btn-success btn-sm">Download</a>
+</td>
+
+<td>{{ i.place.district.district_name }}</td>
+<td>{{ i.place.place_name }}</td>
+
+<td>
+<span class="badge bg-danger">Rejected</span>
+</td>
+
+</tr>
+
+{% empty %}
+<tr>
+<td colspan="9" class="text-muted">No rejected sellers</td>
+</tr>
+{% endfor %}
+
+</tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+
+{% if msg %}
+<script>
+alert("{{ msg }}");
+window.location.href = "{% url 'Admin:verifyseller' %}";
+</script>
+{% endif %}
+
+{% endblock %}

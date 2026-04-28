@@ -1,0 +1,217 @@
+{% extends 'Admin/Header.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+
+body{
+    background:#f4f6fb;
+    font-family:'Segoe UI',sans-serif;
+}
+
+/* Card Container */
+.card-box{
+    background:white;
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    padding:30px;
+    margin-bottom:30px;
+}
+
+/* Heading Style */
+.page-title{
+    font-size:24px;
+    font-weight:700;
+    color:#1a2b49;
+    text-align:center;
+    margin-bottom:25px;
+}
+
+/* Input Field */
+.form-control{
+    border-radius:8px;
+    border:1px solid #dcdcdc;
+    height:45px;
+}
+
+/* Gradient Button */
+.btn-primary-custom{
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    border:none;
+    color:white;
+    height:45px;
+    border-radius:8px;
+    font-weight:500;
+}
+
+.btn-primary-custom:hover{
+    opacity:0.9;
+    color:white;
+}
+
+/* Table Design */
+.table{
+    border-radius:10px;
+    overflow:hidden;
+}
+
+/* TABLE HEADER FIX */
+.table thead{
+    background:#2c3e50;
+}
+
+.table thead th{
+    color:white !important;
+    font-size:14px;
+    letter-spacing:1px;
+    text-align:center;
+}
+
+/* Hover */
+.table tbody tr:hover{
+    background:#f2f4f8;
+}
+
+/* Action Buttons */
+.btn-edit{
+    background:#17a2b8;
+    color:white;
+    border:none;
+    padding:6px 14px;
+    border-radius:6px;
+    font-size:13px;
+}
+
+.btn-delete{
+    background:#dc3545;
+    color:white;
+    border:none;
+    padding:6px 14px;
+    border-radius:6px;
+    font-size:13px;
+}
+
+.btn-edit:hover,
+.btn-delete:hover{
+    opacity:0.9;
+    color:white;
+}
+
+</style>
+
+<div class="container mt-4">
+
+<!-- Add / Edit District -->
+
+<div class="card-box">
+
+<div class="page-title">
+Add / Edit District
+</div>
+
+<form method="post">
+{% csrf_token %}
+
+<div class="row g-3">
+
+<div class="col-md-9">
+
+<input type="text"
+name="district_name"
+class="form-control"
+placeholder="Enter District Name"
+value="{{EditData.district_name|default:''}}"
+required>
+
+</div>
+
+<div class="col-md-3">
+
+<button type="submit" class="btn btn-primary-custom w-100">
+Save District
+</button>
+
+</div>
+
+</div>
+
+</form>
+
+</div>
+
+<!-- District List -->
+
+<div class="card-box">
+
+<div class="page-title">
+District List
+</div>
+
+<div class="table-responsive">
+
+<table class="table table-bordered text-center align-middle">
+
+<thead>
+<tr>
+<th>#</th>
+<th>District Name</th>
+<th>Actions</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for i in districtData %}
+
+<tr>
+
+<td>{{forloop.counter}}</td>
+
+<td>{{i.district_name}}</td>
+
+<td>
+
+<a href="{% url 'Admin:EditDistrict' i.id %}" class="btn btn-edit">
+Edit
+</a>
+
+<a href="{% url 'Admin:deleteDistrict' i.id %}"
+class="btn btn-delete"
+onclick="return confirm('Delete this district?')">
+Delete </a>
+
+</td>
+
+</tr>
+
+{% empty %}
+
+<tr>
+<td colspan="3" class="text-muted">
+No Districts Available
+</td>
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+{% if msg %}
+
+<script>
+alert("{{msg}}")
+window.location="{% url 'Admin:District' %}"
+</script>
+
+{% endif %}
+
+{% endblock %}

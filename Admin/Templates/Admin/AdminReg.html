@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdminReg</title>
+</head>
+<body>
+    <form method="post">
+    {% csrf_token %}
+        <table border="1" align="center">
+        <tr>
+            <td>Name</td>
+            <td><input type="text" name="name" id="" value="{{EditData.adminReg_name}}"></td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td><input type="text" name="Email" id="" value="{{EditData.adminReg_Email}}"></td>
+        </tr>
+        <tr>
+            <td>Password</td>
+            <td><input type="text" name="Password" id="" value="{{EditData.adminReg_password}}"></td>
+        </tr>
+        <tr>
+                <td colspan="2" align="center"><input type="submit" value="Submit"></td>
+        </tr>
+        </table>
+    </form>
+    <table border="1" align="center">
+        <tr>
+            <td>SI.NO</td>
+            <td>name</td>
+            <td>Email</td>
+            <td>Password</td>
+            <td>Actions</td>
+        </tr>
+        {% for i  in AdminData %}
+        <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{i.adminReg_name}}</td>
+                <td>{{i.adminReg_Email}}</td>
+                <td>{{i.adminReg_password}}</td>
+                <td>
+                    <a href="{% url 'Admin:deleteAdminReg' i.id %}">Delete</a>
+                    <a href="{% url 'Admin:EditAdmin' i.id %}">Edit</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tr>
+    </table>
+</body>
+</html>
+{% if msg %}
+<script>
+    alert("{{msg}}")
+    window.location = "{% url 'Admin:AdminReg' %}"
+</script>
+{% endif %}
